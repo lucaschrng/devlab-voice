@@ -7,7 +7,31 @@
 <p>Click on the below button and speak something...</p>
 <p><button type="button" onclick="runSpeechRecognition()">Speech to Text</button> &nbsp; <span id="action"></span></p>
 <div id="output" class="hide"></div>
+
+<p class="random"></p>
 <script>
+
+// random words
+let randomCont = document.querySelector(".random")
+fetch("https://trouve-mot.fr/api/random/2")
+
+    .then((response) => response.json())
+    .then((words) =>{
+    
+      let randomWord = words[0].name  
+      for(let i=0 ; i < randomWord.length ; i++){
+        console.log(i)
+        if(i==0){
+          randomCont.innerHTML+=randomWord[0]
+        }else{
+          randomCont.innerHTML+=" _ "
+        }
+      }
+    })
+
+  
+      
+
   /* JS comes here */
   function runSpeechRecognition() {
     // get output div reference
