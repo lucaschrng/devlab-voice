@@ -1,12 +1,48 @@
 <!doctype html>
 <head>
   <title>JavaScript Speech to Text</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <h2>JavaScript Speech to Text</h2>
 <p>Click on the below button and speak something...</p>
 <p><button type="button" onclick="runSpeechRecognition()">Speech to Text</button> &nbsp; <span id="action"></span></p>
 <div id="output" class="hide"></div>
+<div class="w-full mb-10 alphabet flex flex-col items-center gap-2 fixed bottom-0">
+  <div class="flex gap-2">
+    <span class="A">A</span>
+    <span class="B">B</span>
+    <span class="C">C</span>
+    <span class="D">D</span>
+    <span class="E">E</span>
+    <span class="F">F</span>
+    <span class="G">G</span>
+    <span class="H">H</span>
+    <span class="I">I</span>
+  </div>
+  <div class="flex gap-2">
+    <span class="J">J</span>
+    <span class="K">K</span>
+    <span class="L">L</span>
+    <span class="M">M</span>
+    <span class="N">N</span>
+    <span class="O">O</span>
+    <span class="P">P</span>
+    <span class="Q">Q</span>
+    <span class="R">R</span>
+  </div>
+  <div class="flex gap-2">
+    <span class="S">S</span>
+    <span class="T">T</span>
+    <span class="U">U</span>
+    <span class="V">V</span>
+    <span class="W">W</span>
+    <span class="X">X</span>
+    <span class="Y">Y</span>
+    <span class="Z">Z</span>
+  </div>
+</div>
 <script>
   /* JS comes here */
   function runSpeechRecognition() {

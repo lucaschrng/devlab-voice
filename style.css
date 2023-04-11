@@ -1,0 +1,9 @@
+.alphabet span {
+  height: 4rem;
+  width: 4rem;
+  border: 1px solid black;
+  text-align: center;
+  line-height: 4rem;
+  border-radius: 0.5rem;
+  font-size: 2rem;
+}
