@@ -10,62 +10,97 @@
 <div id="output" class="hide"></div>
 
 <p class="random"></p>
+<img src="./img/0.jpg" alt="">
 <div class="w-full mb-10 alphabet flex flex-col items-center gap-2 fixed bottom-0">
-  <button type="button" class="border border-black p-2 rounded mb-6" onclick="runSpeechRecognition()">Start listening</button>
+  <button type="button" class="border border-black p-2 rounded mb-6" onclick="runSpeechRecognition()">Commencer a
+    &eacute;couter
+  </button>
   <div class="flex gap-2">
-    <span class="A">A</span>
-    <span class="B">B</span>
-    <span class="C">C</span>
-    <span class="D">D</span>
-    <span class="E">E</span>
-    <span class="F">F</span>
-    <span class="G">G</span>
-    <span class="H">H</span>
-    <span class="I">I</span>
+    <span class="letter A">A</span>
+    <span class="letter B">B</span>
+    <span class="letter C">C</span>
+    <span class="letter D">D</span>
+    <span class="letter E">E</span>
+    <span class="letter F">F</span>
+    <span class="letter G">G</span>
+    <span class="letter H">H</span>
+    <span class="letter I">I</span>
   </div>
   <div class="flex gap-2">
-    <span class="J">J</span>
-    <span class="K">K</span>
-    <span class="L">L</span>
-    <span class="M">M</span>
-    <span class="N">N</span>
-    <span class="O">O</span>
-    <span class="P">P</span>
-    <span class="Q">Q</span>
-    <span class="R">R</span>
+    <span class="letter J">J</span>
+    <span class="letter K">K</span>
+    <span class="letter L">L</span>
+    <span class="letter M">M</span>
+    <span class="letter N">N</span>
+    <span class="letter O">O</span>
+    <span class="letter P">P</span>
+    <span class="letter Q">Q</span>
+    <span class="letter R">R</span>
   </div>
   <div class="flex gap-2">
-    <span class="S">S</span>
-    <span class="T">T</span>
-    <span class="U">U</span>
-    <span class="V">V</span>
-    <span class="W">W</span>
-    <span class="X">X</span>
-    <span class="Y">Y</span>
-    <span class="Z">Z</span>
+    <span class="letter S">S</span>
+    <span class="letter T">T</span>
+    <span class="letter U">U</span>
+    <span class="letter V">V</span>
+    <span class="letter W">W</span>
+    <span class="letter X">X</span>
+    <span class="letter Y">Y</span>
+    <span class="letter Z">Z</span>
   </div>
 </div>
 <script>
 
-// random words
-let randomCont = document.querySelector(".random")
-fetch("https://trouve-mot.fr/api/random/2")
+  let letters = document.querySelectorAll('.letter');
+
+  let alphabet = [
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z'
+  ]
+
+  // random words
+  let randomCont = document.querySelector(".random")
+  let randomWord = ""
+  let answer = "";
+  let guesses = 0;
+  let img = document.querySelector('img');
+  fetch("https://trouve-mot.fr/api/random/2")
 
     .then((response) => response.json())
-    .then((words) =>{
+    .then((words) => {
 
-      let randomWord = words[0].name
-      for(let i=0 ; i < randomWord.length ; i++){
-        console.log(i)
-        if(i==0){
-          randomCont.innerHTML+=randomWord[0]
-        }else{
-          randomCont.innerHTML+=" _ "
+      randomWord = words[0].name.toUpperCase()
+      for (let i = 0; i < randomWord.length; i++) {
+        if (i === 0) {
+          randomCont.innerHTML += randomWord[0]
+        } else {
+          randomCont.innerHTML += " _ "
         }
       }
     })
-
-
 
 
   /* JS comes here */
@@ -79,25 +114,55 @@ fetch("https://trouve-mot.fr/api/random/2")
     var recognition = new SpeechRecognition();
 
     // This runs when the speech recognition service starts
-    recognition.onstart = function() {
+    recognition.onstart = function () {
 
       recognition.start();
-
-      action.innerHTML = "<small>listening, please speak...</small>";
     };
 
-    recognition.onspeechend = function() {
+    recognition.onspeechend = function () {
       console.log("end")
-      action.innerHTML = "<small>stopped listening, hope you are done...</small>";
       recognition.stop();
     }
 
     // This runs when the speech recognition service returns result
-    recognition.onresult = function(event) {
-      var transcript = event.results[0][0].transcript.at(-1);
+    recognition.onresult = function (event) {
+      var letter = event.results[0][0].transcript.at(-1);
+      answer += letter;
       var confidence = event.results[0][0].confidence;
-      output.innerHTML = "<b>Text:</b> " + transcript + "<br/> <b>Confidence:</b> " + confidence*100+"%";
-      output.classList.remove("hide");
+      
+      letters.forEach(letterEl => {
+        if (letterEl.innerHTML === letter) {
+          letterEl.classList.add('opacity-50')
+        }
+      })
+
+      randomCont.innerHTML = ""
+      for (let i = 0; i < randomWord.length; i++) {
+        if (i === 0) {
+          randomCont.innerHTML += randomWord[0]
+        } else if (answer.includes(randomWord[i])) {
+          randomCont.innerHTML += randomWord[i]
+        } else {
+          randomCont.innerHTML += " _ "
+        }
+      }
+      
+      if (!randomCont.innerHTML.includes(letter)) guesses += 1;
+      
+      if (guesses === 10) {
+        console.log('lose')
+      } else {
+        if (randomCont.innerHTML.includes("_")) {
+          runSpeechRecognition()
+        } else {
+          console.log('win')
+        }
+      }
+
+      img.src = `./img/${guesses}.jpg`
+
+      console.log(randomWord)
+      runSpeechRecognition()
     };
 
     // start recognition
