@@ -5,12 +5,13 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h2>JavaScript Speech to Text</h2>
-<p>Click on the below button and speak something...</p>
-<div id="output" class="hide"></div>
 
-<p class="random"></p>
-<img src="./img/0.jpg" alt="">
+=
+<div class="flex flex-col items-center justify-center gap-10">
+  <p class="random text-3xl"></p>
+  <img src="./img/0.jpg" alt="">
+  <p class="message"></p>
+</div>
 <div class="w-full mb-10 alphabet flex flex-col items-center gap-2 fixed bottom-0">
   <button type="button" class="border border-black p-2 rounded mb-6" onclick="runSpeechRecognition()">Commencer a
     &eacute;couter
@@ -51,35 +52,7 @@
 <script>
 
   let letters = document.querySelectorAll('.letter');
-
-  let alphabet = [
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'I',
-    'J',
-    'K',
-    'L',
-    'M',
-    'N',
-    'O',
-    'P',
-    'Q',
-    'R',
-    'S',
-    'T',
-    'U',
-    'V',
-    'W',
-    'X',
-    'Y',
-    'Z'
-  ]
+  let message = document.querySelector('.message');
 
   // random words
   let randomCont = document.querySelector(".random")
@@ -105,11 +78,7 @@
 
   /* JS comes here */
   function runSpeechRecognition() {
-    // get output div reference
-    var output = document.getElementById("output");
-    // get action element reference
-    var action = document.getElementById("action");
-    // new speech recognition object
+
     var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
     var recognition = new SpeechRecognition();
 
@@ -150,18 +119,17 @@
       if (!randomCont.innerHTML.includes(letter)) guesses += 1;
       
       if (guesses === 10) {
-        console.log('lose')
+        message.innerHTML = "Perdu !"
       } else {
         if (randomCont.innerHTML.includes("_")) {
           runSpeechRecognition()
         } else {
-          console.log('win')
+          message.innerHTML = "Bravo !"
         }
       }
 
       img.src = `./img/${guesses}.jpg`
 
-      console.log(randomWord)
       runSpeechRecognition()
     };
 
